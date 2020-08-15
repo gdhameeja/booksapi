@@ -14,3 +14,10 @@ Expose APIs for below operations using swagger yaml - https://editor.swagger.io
 - Search book based on name and add filters for author and availability status
 - Get book information based on the name
 - Bulk API - To add books in bulk, should accept File as input with format as comma separated book info
+
+
+## RUN (assuming you have docker)
+
+`make build`
+`make run`
+`localhost:8080/login`
