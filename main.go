@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"os"
 
 	"gdhameeja/booksapi/models"
 	"github.com/gorilla/mux"
@@ -13,6 +14,10 @@ import (
 const somethingWentWrong = "somethingWentWrong"
 
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "loaddata" {
+		models.LoadData(os.Args[2:])
+		return
+	}
 	router := mux.NewRouter()
 	router.HandleFunc("/login", loginHandler).Methods("POST")
 	router.HandleFunc("/books", getBooksHandler).Methods("GET")

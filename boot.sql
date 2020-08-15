@@ -31,5 +31,5 @@ create table if not exists user (
 	check ( role like '%admin%' or role like '%regular%' )
 );
 
-insert into user (id, username, role, password, token) values (1, 'Gaurav Dhameeja', 'admin', "password", "token1");
+insert into user (id, username, role, password, token) values (1, 'gauravdhameeja', 'admin', "password", "token1");
 insert into user (id, username, role, password, token) values (2, 'User1', 'regular', "password", "token2");

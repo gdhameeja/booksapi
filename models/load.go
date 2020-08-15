@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"log"
@@ -10,16 +10,16 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func main() {
+func LoadData(args []string) {
 	db, err := sql.Open("sqlite3", "books.db")
 	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
 
-	username := os.Args[1]
-	password := os.Args[2]
-	filename := os.Args[3]
+	username := args[0]
+	password := args[1]
+	filename := args[2]
 	rows, err := db.Query("select role, password from user where username = ?", username)
 	if err != nil {
 		panic("Something went wrong while accessing db for authorization")
