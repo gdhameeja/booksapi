@@ -19,7 +19,7 @@ func Login(userUsername, password string) (string, error) {
 	db := acquireDBConn()
 	defer db.Close()
 
-	rows, err := db.Query("select password from user where username = ?", userUsername)
+	rows, err := db.Query("select token, password from user where username = ?", userUsername)
 	if err != nil {
 		log.Fatal("Error occurred while fetching records from sqlite", err)
 		return "", err
@@ -27,15 +27,16 @@ func Login(userUsername, password string) (string, error) {
 	defer rows.Close()
 
 	var origPassword string
+	var token string
 	for rows.Next() {
-		if err := rows.Scan(&origPassword); err != nil {
+		if err := rows.Scan(&token, &origPassword); err != nil {
 			log.Print(err)
 		}
 	}
 	if password != origPassword {
 		return "", nil
 	}
-	return "this is a token", nil
+	return token, nil
 }
 
 func GetUserForToken(token string) *User {
