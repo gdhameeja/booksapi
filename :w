@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strconv"
 
 	"gdhameeja/booksapi/models"
 	"github.com/gorilla/mux"
@@ -62,17 +61,12 @@ func loginHandler(rw http.ResponseWriter, req *http.Request) {
 
 // return all books or a single one according to request params if any
 func getBooksHandler(rw http.ResponseWriter, req *http.Request) {
-	var books []models.Book
+	var books []Book
 	param := req.URL.Query()
-	if stringId, ok := param["id"]; ok {
-		id, err := strconv.Atoi(stringId[0])
-		if err != nil {
-			http.Error(rw, "Id should be int", http.StatusBadRequest)
-		}
-		books = append(books, models.GetBook(id))
+	if param {
+		books = append(books, GetBook(param["id"])
 	} else {
-		books = models.GetAllBooks()
-	}
+	books = models.GetAllBooks()
 	resp, err := json.Marshal(books)
 	if err != nil {
 		log.Print(err)

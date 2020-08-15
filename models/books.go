@@ -57,3 +57,22 @@ func GetAllBooks() []Book {
 	}
 	return books
 }
+
+func GetBook(id int) Book {
+	db := acquireDBConn()
+	defer db.Close()
+
+	rows, err := db.Query("select * from book where id = ?", id)
+	defer rows.Close()
+	if err != nil {
+		log.Print(err)
+		return Book{}
+	}
+	var book Book
+	var authorId uint32
+	for rows.Next() {
+		rows.Scan(&book.Id, &book.Name, &authorId, &book.Status)
+	}
+	book.Author = GetAuthor(authorId)
+	return book
+}
