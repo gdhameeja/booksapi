@@ -18,6 +18,7 @@ func main() {
 		models.LoadData(os.Args[2:])
 		return
 	}
+	log.Print("listening for connections")
 	router := mux.NewRouter()
 	router.HandleFunc("/login", loginHandler).Methods("POST")
 	router.HandleFunc("/books", getBooksHandler).Methods("GET")
@@ -25,6 +26,7 @@ func main() {
 }
 
 func loginHandler(rw http.ResponseWriter, req *http.Request) {
+	log.Print("Login request received")
 	var reqData map[string]string
 
 	err := json.NewDecoder(req.Body).Decode(&reqData)
