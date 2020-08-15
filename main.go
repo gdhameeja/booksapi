@@ -5,13 +5,16 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	"gdhameeja/booksapi/models"
+	"github.com/gorilla/mux"
 )
+
+const somethingWentWrong = "somethingWentWrong"
 
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/login", loginHandler).Methods("POST")
+	router.HandleFunc("/books", getBooksHandler).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8888", router))
 }
 
@@ -48,10 +51,22 @@ func loginHandler(rw http.ResponseWriter, req *http.Request) {
 	response := map[string]string{"token": token}
 	resp, err := json.Marshal(response)
 	if err != nil {
-		http.Error(rw, "Something went wrong", http.StatusInternalServerError)
+		http.Error(rw, somethingWentWrong, http.StatusInternalServerError)
 		return
 	}
 
+	rw.Header().Set("Content-Type", "application/json")
+	rw.Write(resp)
+}
+
+// return all books or a single one according to request params if any
+func getBooksHandler(rw http.ResponseWriter, req *http.Request) {
+	books := models.GetAllBooks()
+	resp, err := json.Marshal(books)
+	if err != nil {
+		log.Print(err)
+		http.Error(rw, somethingWentWrong, http.StatusInternalServerError)
+	}
 	rw.Header().Set("Content-Type", "application/json")
 	rw.Write(resp)
 }
