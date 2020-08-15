@@ -17,7 +17,8 @@ Expose APIs for below operations using swagger yaml - https://editor.swagger.io
 
 
 ## RUN (assuming you have docker)
-
-`make build`
-`make run`
-`localhost:8080/login`
+```
+$ make build
+$ make run
+$ localhost:8080/login
+```
