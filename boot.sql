@@ -27,8 +27,9 @@ create table if not exists user (
 	username varchar(20) not null,
 	role varchar(20),
 	password varchar(10) not null,
+	token text,
 	check ( role like '%admin%' or role like '%regular%' )
 );
 
-insert into user (id, username, role, password) values (1, 'Gaurav Dhameeja', 'admin', "password");
-insert into user (id, username, role, password) values (2, 'User1', 'regular', "password");
+insert into user (id, username, role, password, token) values (1, 'Gaurav Dhameeja', 'admin', "password", "token1");
+insert into user (id, username, role, password, token) values (2, 'User1', 'regular', "password", "token2");

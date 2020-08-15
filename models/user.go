@@ -10,16 +10,16 @@ const (
 )
 
 type User struct {
-	uid  uint32 `json:"uid"`
-	name string `json:"name"`
-	role string `json:"role"`
+	Id  uint32 `json:"id"`
+	Username string `json:"Username"`
+	Role string `json:"role"`
 }
 
-func Login(username, password string) (string, error) {
+func Login(userUsername, password string) (string, error) {
 	db := acquireDBConn()
 	defer db.Close()
 
-	rows, err := db.Query("select password from user where username = ?", username)
+	rows, err := db.Query("select password from user where username = ?", userUsername)
 	if err != nil {
 		log.Fatal("Error occurred while fetching records from sqlite", err)
 		return "", err
@@ -36,4 +36,23 @@ func Login(username, password string) (string, error) {
 		return "", nil
 	}
 	return "this is a token", nil
+}
+
+func GetUserForToken(token string) *User {
+	db := acquireDBConn()
+	defer db.Close()
+	rows, err := db.Query("select id, Username, role from user where token = ?", token)
+	if err != nil {
+		log.Print(err)
+		return nil
+	}
+
+	var user User
+	for rows.Next() {
+		rows.Scan(&user.Id, &user.Username, &user.Role)
+	}
+	if user.Username == "" {
+		return nil
+	}
+	return &user
 }

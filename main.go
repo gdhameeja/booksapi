@@ -62,6 +62,10 @@ func loginHandler(rw http.ResponseWriter, req *http.Request) {
 
 // return all books or a single one according to request params if any
 func getBooksHandler(rw http.ResponseWriter, req *http.Request) {
+	if !isAuthorized(req) {
+		http.Error(rw, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 	var books []models.Book
 	param := req.URL.Query()
 	if stringId, ok := param["id"]; ok {
@@ -80,4 +84,14 @@ func getBooksHandler(rw http.ResponseWriter, req *http.Request) {
 	}
 	rw.Header().Set("Content-Type", "application/json")
 	rw.Write(resp)
+}
+
+
+func isAuthorized(req *http.Request) bool {
+	log.Print(req.Header)
+	if token, ok := req.Header["Authorization"]; ok {
+		user := models.GetUserForToken(token[0])
+		return user != nil
+	}
+	return false
 }
